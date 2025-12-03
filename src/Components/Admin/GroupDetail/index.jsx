@@ -3,6 +3,7 @@ import { GroupApi } from "../../../utils/Controllers/GroupApi";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Loading from "../../Other/UI/Loadings/Loading";
+import Create from "../Payment/component/Create";
 
 export default function GroupDetail() {
     const { id } = useParams();
@@ -123,9 +124,7 @@ export default function GroupDetail() {
             </div>
 
             <div className="flex items-start gap-6 w-full">
-                {/* Chap qism - 30% - Guruh ma'lumotlari */}
                 <div className="w-[30%] space-y-6">
-                    {/* Asosiy ma'lumotlar */}
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold text-gray-800 mb-4">Asosiy ma'lumotlar</h2>
                         <div className="space-y-4">
@@ -153,7 +152,6 @@ export default function GroupDetail() {
                         </div>
                     </div>
 
-                    {/* Hodimlar uchun akkordeon */}
                     <div className="bg-white rounded-lg shadow-md overflow-hidden">
                         <button
                             className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50"
@@ -195,49 +193,56 @@ export default function GroupDetail() {
                         )}
                     </div>
 
-                    {/* O'quvchilar uchun akkordeon */}
                     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <button
-                            className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50"
-                            onClick={() => handleOpen(2)}
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="text-lg font-medium">O'quvchilar</span>
-                                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                    {group.student?.length || 0}
-                                </span>
-                            </div>
-                            <svg
-                                className={`w-5 h-5 transform transition-transform ${openAccordion === 2 ? 'rotate-180' : ''}`}
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+    <button
+        className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50"
+        onClick={() => handleOpen(2)}
+    >
+        <div className="flex items-center gap-2">
+            <span className="text-lg font-medium">O'quvchilar</span>
+            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                {group.student?.length || 0}
+            </span>
+        </div>
+        <svg
+            className={`w-5 h-5 transform transition-transform ${openAccordion === 2 ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+        >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
 
-                        {openAccordion === 2 && (
-                            <div className="px-6 pb-4">
-                                {group.student && group.student.length > 0 ? (
-                                    <div className="space-y-3">
-                                        {group.student.map((student, index) => (
-                                            <div key={index} className="p-3 border rounded-lg">
-                                                <div className="font-medium">{student.name || `O'quvchi ${index + 1}`}</div>
-                                                <div className="text-sm text-gray-600">{student.email || 'Kontakt ma\'lumotlari yo\'q'}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-gray-500 text-center py-4">
-                                        O'quvchilar ro'yxatdan o'tmagan
-                                    </div>
-                                )}
-                            </div>
-                        )}
+    {openAccordion === 2 && (
+        <div className="px-6 pb-4 space-y-3">
+            {group.student && group.student.length > 0 ? (
+                group.student.map((student, index) => (
+                    <div key={index} className="p-3 border rounded-lg flex justify-between items-center">
+                        <div>
+                            <div className="font-medium">{student.name || `O'quvchi ${index + 1}`}</div>
+                            <div className="text-sm text-gray-600">{student.email || 'Kontakt ma\'lumotlari yo\'q'}</div>
+                        </div>
+
+                        <div>
+                            <Create
+                                student_id={student.id}
+                                group_id={group.id}
+                                refresh={() => GetPayments(group.id, student.id)}
+                            />
+                        </div>
                     </div>
+                ))
+            ) : (
+                <div className="text-gray-500 text-center py-4">
+                    O'quvchilar ro'yxatdan o'tmagan
+                </div>
+            )}
+        </div>
+    )}
+</div>
 
-                    {/* Yaralgan vaqt */}
+
                     <div className="p-4 bg-gray-50 rounded-lg">
                         <div className="text-sm text-gray-600 space-y-1">
                             <div className="flex justify-between">
@@ -252,7 +257,6 @@ export default function GroupDetail() {
                     </div>
                 </div>
 
-                {/* O'ng qism - 70% - Qabul qilish jadvali */}
                 <div className="w-[70%]">
                     <div className="bg-white rounded-lg shadow-md p-6 h-full">
                         <div className="flex justify-between items-center mb-6">
@@ -310,7 +314,6 @@ export default function GroupDetail() {
                             </table>
                         </div>
 
-                        {/* Pagination */}
                         {attendanceData.length > 0 && (
                             <div className="flex justify-between items-center mt-6 pt-6 border-t">
                                 <div className="text-sm text-gray-600">

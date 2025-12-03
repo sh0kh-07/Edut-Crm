@@ -5,6 +5,7 @@ import Group from "../Components/Admin/Group";
 import GroupDetail from "../Components/Admin/GroupDetail";
 import PaymentMethod from "../Components/Admin/PaymentMethod";
 import Room from "../Components/Admin/Room";
+import Salary from "../Components/Admin/Salary";
 import SocialMedia from "../Components/Admin/SocialMedia";
 import Student from "../Components/Admin/Student";
 import Subject from "../Components/Admin/Subject";
@@ -65,5 +66,10 @@ export const AdminRoutes = [
         name: 'Group detail',
         path: 'group/:id',
         component: <GroupDetail />
+    },
+        {
+        name: 'Salary',
+        path: 'salary',
+        component: <Salary />
     },
 ]
