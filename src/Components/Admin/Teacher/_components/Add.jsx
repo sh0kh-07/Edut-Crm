@@ -11,7 +11,7 @@ import { GroupApi } from "../../../../utils/Controllers/GroupApi";
 import Cookies from "js-cookie";
 import { Alert } from "../../../../utils/Alert";
 
-export default function Add({ student, refresh }) {
+export default function Add({ employee, refresh }) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState("");
@@ -23,9 +23,9 @@ export default function Add({ student, refresh }) {
         try {
             const response = await GroupApi.GetAll(Number(Cookies?.get("school_id")));
             if (response && response.data) {
-                const studentGroupIds = student?.group?.map(g => g.id) || [];
+                const employeeGroupIds = employee?.group?.map(g => g.id) || [];
                 const availableGroups = response.data.filter(group =>
-                    !studentGroupIds.includes(group.id)
+                    !employeeGroupIds.includes(group.id)
                 );
                 setGroups(availableGroups);
             }
@@ -36,7 +36,7 @@ export default function Add({ student, refresh }) {
 
     useEffect(() => {
         GetGroups();
-    }, [student]);
+    }, [employee]);
 
     const AddToGroup = async () => {
         if (!selectedGroup) return;
@@ -46,12 +46,12 @@ export default function Add({ student, refresh }) {
             const selectedGroupData = groups.find(g => g.id === Number(selectedGroup));
 
             const data = {
-                student_id: student.id,
+                employee_id: employee.id,
                 group_id: Number(selectedGroup),
                 group_name: selectedGroupData?.name || ""
             };
 
-            const response = await GroupApi?.Add(data);
+            const response = await GroupApi?.AddTeacher(data);
             if (response) {
                 setOpen(false);
                 setSelectedGroup("");
@@ -67,7 +67,7 @@ export default function Add({ student, refresh }) {
         }
     };
 
-    const currentGroups = student?.group?.map(g => g.group_name).join(", ") || "Guruh yo'q";
+    const currentGroups = employee?.group?.map(g => g.group_name).join(", ") || "Guruh yo'q";
 
     return (
         <>
@@ -80,14 +80,14 @@ export default function Add({ student, refresh }) {
 
             <Dialog open={open} handler={handleOpen} size="sm" className="rounded-lg">
                 <DialogHeader className="text-lg font-semibold text-gray-800">
-                    O'quvchini guruhga qo'shish
+                    Ustozni guruhga qo'shish
                 </DialogHeader>
 
                 <DialogBody className="space-y-4 py-4">
                     <div className="space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <p className="text-gray-700 font-medium">{student?.full_name}</p>
+                        <p className="text-gray-700 font-medium">{employee?.full_name}</p>
                         <p className="text-gray-600 text-sm">
-                            Telefon: {student?.phone_number}
+                            Telefon: {employee?.phone_number}
                         </p>
                         <p className="text-gray-600 text-sm">
                             Joriy guruhlar:{" "}

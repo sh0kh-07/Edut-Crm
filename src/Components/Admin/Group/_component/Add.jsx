@@ -10,8 +10,9 @@ import { Plus } from "lucide-react";
 import { GroupApi } from "../../../../utils/Controllers/GroupApi";
 import Cookies from "js-cookie";
 import { Alert } from "../../../../utils/Alert";
+import { SubjectApi } from "../../../../utils/Controllers/SubjectApi";
 
-export default function Add({ student, refresh }) {
+export default function Add({ group, refresh }) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState("");
@@ -19,13 +20,13 @@ export default function Add({ student, refresh }) {
 
     const handleOpen = () => setOpen(!open);
 
-    const GetGroups = async () => {
+    const GetSubject = async () => {
         try {
-            const response = await GroupApi.GetAll(Number(Cookies?.get("school_id")));
+            const response = await SubjectApi.Get(Number(Cookies?.get("school_id")));
             if (response && response.data) {
-                const studentGroupIds = student?.group?.map(g => g.id) || [];
+                const groupGroupIds = group?.group?.map(g => g.id) || [];
                 const availableGroups = response.data.filter(group =>
-                    !studentGroupIds.includes(group.id)
+                    !groupGroupIds.includes(group.id)
                 );
                 setGroups(availableGroups);
             }
@@ -35,10 +36,10 @@ export default function Add({ student, refresh }) {
     };
 
     useEffect(() => {
-        GetGroups();
-    }, [student]);
+        GetSubject();
+    }, [group]);
 
-    const AddToGroup = async () => {
+    const AddSubject = async () => {
         if (!selectedGroup) return;
 
         setLoading(true);
@@ -46,12 +47,11 @@ export default function Add({ student, refresh }) {
             const selectedGroupData = groups.find(g => g.id === Number(selectedGroup));
 
             const data = {
-                student_id: student.id,
-                group_id: Number(selectedGroup),
-                group_name: selectedGroupData?.name || ""
+                group_id: group.id,
+                subject_name: selectedGroupData?.name || ""
             };
 
-            const response = await GroupApi?.Add(data);
+            const response = await GroupApi?.AddSubject(data);
             if (response) {
                 setOpen(false);
                 setSelectedGroup("");
@@ -67,7 +67,7 @@ export default function Add({ student, refresh }) {
         }
     };
 
-    const currentGroups = student?.group?.map(g => g.group_name).join(", ") || "Guruh yo'q";
+
 
     return (
         <>
@@ -79,36 +79,21 @@ export default function Add({ student, refresh }) {
             </Button>
 
             <Dialog open={open} handler={handleOpen} size="sm" className="rounded-lg">
-                <DialogHeader className="text-lg font-semibold text-gray-800">
-                    O'quvchini guruhga qo'shish
-                </DialogHeader>
+
 
                 <DialogBody className="space-y-4 py-4">
-                    <div className="space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <p className="text-gray-700 font-medium">{student?.full_name}</p>
-                        <p className="text-gray-600 text-sm">
-                            Telefon: {student?.phone_number}
-                        </p>
-                        <p className="text-gray-600 text-sm">
-                            Joriy guruhlar:{" "}
-                            <span className="text-gray-700 font-medium">
-                                {currentGroups}
-                            </span>
-                        </p>
-                    </div>
 
                     <div className="mt-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Guruhni tanlang
-                        </label>
-
+                        <h2 className="font-bold text-[20px] mb-[10px]">
+                            Fan biriktirish
+                        </h2>
                         <select
                             value={selectedGroup}
                             onChange={(e) => setSelectedGroup(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-800 focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
                         >
                             <option value="" disabled>
-                                Guruhni tanlang
+                                Fandi tanlang
                             </option>
 
                             {groups.length > 0 ? (
@@ -119,7 +104,7 @@ export default function Add({ student, refresh }) {
                                 ))
                             ) : (
                                 <option value="" disabled>
-                                    Mavjud guruh yo'q
+                                    Mavjud fan yo'q
                                 </option>
                             )}
                         </select>
@@ -138,7 +123,7 @@ export default function Add({ student, refresh }) {
                     </Button>
 
                     <Button
-                        onClick={AddToGroup}
+                        onClick={AddSubject}
                         disabled={!selectedGroup || loading}
                         className={`${!selectedGroup ? "bg-gray-300" : "bg-gray-800 hover:bg-black"
                             } text-white normal-case shadow-sm`}

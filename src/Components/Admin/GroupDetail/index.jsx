@@ -236,7 +236,6 @@ export default function GroupDetail() {
                             </div>
                         )}
                     </div>
-
                     {/* Yaralgan vaqt */}
                     <div className="p-4 bg-gray-50 rounded-lg">
                         <div className="text-sm text-gray-600 space-y-1">

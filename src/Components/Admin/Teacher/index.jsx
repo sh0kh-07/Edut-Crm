@@ -9,6 +9,8 @@ import Loading from "../../Other/UI/Loadings/Loading";
 import EmptyData from "../../Other/UI/NoData/EmptyData";
 import Delete from "./_components/Delete";
 import Put from "./_components/Put";
+import Add from "./_components/Add";
+import AddSub from "./_components/AddSub";
 
 export default function Teacher() {
     const [teachers, setTeachers] = useState([]);
@@ -74,6 +76,8 @@ export default function Teacher() {
                                             {t.full_name}
                                         </div>
                                         <div className="flex items-center gap-[10px]">
+                                            <AddSub employee={t} refresh={getTeacher} />
+                                            <Add employee={t} refresh={getTeacher} />
                                             <Put teacher={t} refresh={getTeacher} />
                                             <Delete id={t?.id} refresh={getTeacher} />
                                         </div>

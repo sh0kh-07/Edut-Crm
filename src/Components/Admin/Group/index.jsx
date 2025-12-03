@@ -26,6 +26,7 @@ import Delete from "./_component/Delete";
 import Put from "./_component/Put";
 import { NavLink } from "react-router-dom";
 import Eye from "../../Other/UI/Icons/Eye";
+import Add from "./_component/Add";
 
 export default function Group() {
     const [groups, setGroups] = useState([]);
@@ -97,6 +98,7 @@ export default function Group() {
                                                     <Eye size={18} />
                                                 </Button>
                                             </NavLink>
+                                            {g?.subject <= 0 && (<Add group={g} refresh={GetGroup} />)}
                                             <Put data={g} refresh={GetGroup} />
                                             <Delete id={g?.id} refresh={GetGroup} />
                                         </div>
