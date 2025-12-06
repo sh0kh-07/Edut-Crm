@@ -129,47 +129,50 @@ export default function StudentDetailUz() {
                     </TabPanel>
 
                     {/* To'lovlar */}
+                    {/* To'lovlar */}
                     <TabPanel value="payments">
                         {student.payment.length === 0 ? (
                             <Typography>To'lovlar mavjud emas</Typography>
                         ) : (
-                            student.payment.map((p) => (
-                                <Card key={p.id} className="mb-4">
-                                    <CardBody className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                        <div>
-                                            <Typography className="font-bold">{p.method}</Typography>
-                                            <Typography className="text-gray-600">
-                                                {p.month} {p.year}
-                                            </Typography>
-                                            <Typography className="text-gray-600">Narx: {formatPrice(p.price)} UZS</Typography>
-                                            {p.discount > 0 && (
+                            student.payment.map((p) => {
+                                const paidDate = new Date(p.createdAt); // создаём объект даты
+                                const formattedDate = paidDate.toLocaleDateString("uz-UZ", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                });
+
+                                return (
+                                    <Card key={p.id} className="mb-4">
+                                        <CardBody className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                            <div>
+                                                <Typography className="font-bold">{p.method}</Typography>
                                                 <Typography className="text-gray-600">
-                                                    Chegirma: {formatPrice(p.discount)}%
+                                                    {p.month} {p.year}
                                                 </Typography>
-                                            )}
-                                            <Typography className="text-gray-600">Tavsif: {p.description}</Typography>
-                                        </div>
-                                        <Chip
-                                            value={
-                                                p.status === "create"
-                                                    ? "Yaratildi"
-                                                    : p.status === "paid"
-                                                        ? "To'langan"
-                                                        : "Boshqa"
-                                            }
-                                            color={
-                                                p.status === "create"
-                                                    ? "blue"
-                                                    : p.status === "paid"
-                                                        ? "green"
-                                                        : "gray"
-                                            }
-                                        />
-                                    </CardBody>
-                                </Card>
-                            ))
+                                                <Typography className="text-gray-600">
+                                                    Narx: {formatPrice(p.price)} UZS
+                                                </Typography>
+                                                {p.discount > 0 && (
+                                                    <Typography className="text-gray-600">
+                                                        Chegirma: {formatPrice(p.discount)}%
+                                                    </Typography>
+                                                )}
+                                                <Typography className="text-gray-600">Tavsif: {p.description}</Typography>
+                                                <Typography className="text-gray-600 font-semibold">
+                                                    To‘langan vaqt: {formattedDate}
+                                                </Typography>
+                                            </div>
+                                                
+                                        </CardBody>
+                                    </Card>
+                                );
+                            })
                         )}
                     </TabPanel>
+
                 </TabsBody>
             </Tabs>
         </div>
