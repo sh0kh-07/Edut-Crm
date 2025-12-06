@@ -4,7 +4,7 @@ import AdminHeader from "../Components/Other/UI/Header/AdminHeader";
 import Sidebar from "../Components/SuperAdmin/Sidebar";
 
 export default function SuperAdminLayout() {
-    const [active, setActive] = useState(false); // true = открыт сайдбар
+    const [active, setActive] = useState(true); // true = открыт сайдбар
 
     return (
         <div className="flex w-full overflow-hidden bg-[#FAFAFA] relative">

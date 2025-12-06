@@ -56,7 +56,7 @@ export default function OwnerDetail() {
         <div className="mx-auto space-y-6">
 
             {/* Header + Create Button */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-wrap">
                 <Typography variant="h4" className="font-bold text-black">
                     Markaz egasi haqida
                 </Typography>
@@ -136,7 +136,7 @@ export default function OwnerDetail() {
                                     {s?.image ? (
                                         <img
                                             className="h-40  rounded-xl border"
-                                            src={CONFIG?.API_URL + s?.image}
+                                            src={CONFIG?.API_URL + "/" + s?.image}
                                             alt="Maktab rasmi"
                                         />
                                     ) : (

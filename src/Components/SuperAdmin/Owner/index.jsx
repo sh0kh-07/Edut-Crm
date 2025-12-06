@@ -38,7 +38,7 @@ export default function Owner() {
     }
     return (
         <>
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between flex-wrap mb-5">
                 <h2 className="text-[25px] font-bold">Markaz egalari</h2>
                 <Create refresh={getAllOwner} />
             </div>
