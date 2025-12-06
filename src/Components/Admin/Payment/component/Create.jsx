@@ -38,7 +38,7 @@ export default function Create({ refresh, student_id, group_id }) {
     const [data, setData] = useState({
         school_id: Number(Cookies?.get("school_id")),
         student_id: student_id,
-        group_id: group_id ,
+        group_id: group_id,
         year: new Date().getFullYear().toString(),
         month: "",
         method: "",
@@ -113,18 +113,24 @@ export default function Create({ refresh, student_id, group_id }) {
                 <DialogBody className="flex flex-col gap-4">
 
                     {/* Oy */}
+                    {/* Oy */}
                     <select
                         className="border p-2 rounded-md"
                         value={data.month}
                         onChange={(e) => setData({ ...data, month: e.target.value })}
                     >
                         <option value="">Oy tanlang</option>
-                        {months.map((month, idx) => (
-                            <option key={idx} value={month}>
-                                {month}
-                            </option>
-                        ))}
+                        {months.map((month, idx) => {
+                            // idx начинается с 0, поэтому +1 и добавляем ведущий ноль
+                            const monthNumber = (idx + 1).toString().padStart(2, "0");
+                            return (
+                                <option key={idx} value={monthNumber}>
+                                    {month}
+                                </option>
+                            );
+                        })}
                     </select>
+
 
                     {/* Yil */}
                     <Input
