@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 
 export default function Create({ refresh }) {
     const School_id = Number(Cookies?.get("school_id"));
+    const type = Cookies?.get('type')
+
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -63,7 +65,7 @@ export default function Create({ refresh }) {
             </Button>
 
             <Dialog open={open} handler={() => setOpen(false)} size="sm">
-                <DialogHeader>O‘quvchi yaratish</DialogHeader>
+                <DialogHeader>{type === "PreSchool" ? "Bola yaratish" : "Talaba yaratish"}</DialogHeader>
 
                 <DialogBody className="flex flex-col gap-4">
                     <Input
@@ -83,12 +85,13 @@ export default function Create({ refresh }) {
                     />
 
                     <Input
-                        label="O‘quvchi ismi"
+                        label={type === "PreSchool" ? "Bola ismi" : "Talaba ismi"}
                         value={data.full_name}
                         onChange={(e) =>
                             setData({ ...data, full_name: e.target.value })
                         }
                     />
+                    {type === "School" &&  
 
                     <Input
                         label="O‘quvchi telefon raqami"
@@ -97,6 +100,7 @@ export default function Create({ refresh }) {
                             setData({ ...data, phone_number: e.target.value })
                         }
                     />
+                    }
                 </DialogBody>
 
                 <DialogFooter className="flex gap-2">

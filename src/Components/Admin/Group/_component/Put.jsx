@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Input } from "@material-tailwind/react";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Input, Tooltip } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { RoomApi } from "../../../../utils/Controllers/RoomApi";
 import { GroupApi } from "../../../../utils/Controllers/GroupApi";
@@ -96,39 +96,41 @@ export default function Put({ data, refresh }) {
 
     return (
         <>
-            <Button
-                className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
-                onClick={handleOpen}
-            >
-                <Edit size={18} />
-            </Button>
+            <Tooltip content="Tahrirlash">
+                <Button
+                    className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
+                    onClick={handleOpen}
+                >
+                    <Edit size={18} />
+                </Button>
+            </Tooltip>
 
-            <Dialog open={open} handler={handleOpen} size="sm">
-                <DialogHeader>Guruhni tahrirlash</DialogHeader>
+                <Dialog open={open} handler={handleOpen} size="sm">
+                    <DialogHeader>Guruhni tahrirlash</DialogHeader>
 
-                <DialogBody divider className="flex flex-col gap-4">
+                    <DialogBody divider className="flex flex-col gap-4">
 
-                    <Input
-                        label="Guruh nomi"
-                        value={formData.name}
-                        onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                        }
-                    />
+                        <Input
+                            label="Guruh nomi"
+                            value={formData.name}
+                            onChange={(e) =>
+                                setFormData({ ...formData, name: e.target.value })
+                            }
+                        />
 
-                    <Input
-                        label="Narxi"
-                        value={formData.price}
-                        onChange={handlePriceChange}
-                    />
+                        <Input
+                            label="Narxi"
+                            value={formData.price}
+                            onChange={handlePriceChange}
+                        />
 
-                    {/* Простой select с красивым стилем */}
-                    <div className="w-full">
-                        <label className="block text-gray-700 font-medium mb-1">Xona</label>
-                        <select
-                            value={formData.room_id}
-                            onChange={(e) => setFormData({ ...formData, room_id: e.target.value })}
-                            className="
+                        {/* Простой select с красивым стилем */}
+                        <div className="w-full">
+                            <label className="block text-gray-700 font-medium mb-1">Xona</label>
+                            <select
+                                value={formData.room_id}
+                                onChange={(e) => setFormData({ ...formData, room_id: e.target.value })}
+                                className="
                                 w-full 
                                 px-4 py-3 
                                 border border-gray-300 
@@ -141,63 +143,63 @@ export default function Put({ data, refresh }) {
                                 focus:ring-blue-300
                                 transition
                             "
+                            >
+                                <option value="">— Tanlanmagan —</option>
+                                {rooms.map((r) => (
+                                    <option key={r.id} value={String(r.id)}>
+                                        {r.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <Input
+                            type="date"
+                            label="Boshlanish sanasi"
+                            value={formData.start_date}
+                            onChange={(e) =>
+                                setFormData({ ...formData, start_date: e.target.value })
+                            }
+                        />
+
+                        <Input
+                            type="time"
+                            label="Boshlanish vaqti"
+                            value={formData.start_time}
+                            onChange={(e) =>
+                                setFormData({ ...formData, start_time: e.target.value })
+                            }
+                        />
+
+                        <Input
+                            type="time"
+                            label="Tugash vaqti"
+                            value={formData.end_time}
+                            onChange={(e) =>
+                                setFormData({ ...formData, end_time: e.target.value })
+                            }
+                        />
+
+                    </DialogBody>
+
+                    <DialogFooter>
+                        <Button
+                            variant="text"
+                            color="gray"
+                            onClick={handleOpen}
+                            className="mr-2"
                         >
-                            <option value="">— Tanlanmagan —</option>
-                            {rooms.map((r) => (
-                                <option key={r.id} value={String(r.id)}>
-                                    {r.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                            Bekor qilish
+                        </Button>
 
-                    <Input
-                        type="date"
-                        label="Boshlanish sanasi"
-                        value={formData.start_date}
-                        onChange={(e) =>
-                            setFormData({ ...formData, start_date: e.target.value })
-                        }
-                    />
-
-                    <Input
-                        type="time"
-                        label="Boshlanish vaqti"
-                        value={formData.start_time}
-                        onChange={(e) =>
-                            setFormData({ ...formData, start_time: e.target.value })
-                        }
-                    />
-
-                    <Input
-                        type="time"
-                        label="Tugash vaqti"
-                        value={formData.end_time}
-                        onChange={(e) =>
-                            setFormData({ ...formData, end_time: e.target.value })
-                        }
-                    />
-
-                </DialogBody>
-
-                <DialogFooter>
-                    <Button
-                        variant="text"
-                        color="gray"
-                        onClick={handleOpen}
-                        className="mr-2"
-                    >
-                        Bekor qilish
-                    </Button>
-
-                    <Button
-                        onClick={EditGroup}
-                        disabled={loading}
-                    >
-                        {loading ? "Saqlanmoqda..." : "Saqlash"}
-                    </Button>
-                </DialogFooter>
-            </Dialog>
-        </>
-    );
+                        <Button
+                            onClick={EditGroup}
+                            disabled={loading}
+                        >
+                            {loading ? "Saqlanmoqda..." : "Saqlash"}
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
+            </>
+            );
 }

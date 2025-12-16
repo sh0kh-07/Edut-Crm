@@ -3,7 +3,7 @@ import { Employee } from "../../../utils/Controllers/Employee";
 import Create from "./_components/Create";
 import Cookies from "js-cookie";
 
-import { Card, CardBody, Button } from "@material-tailwind/react";
+import { Card, CardBody, Button, Tooltip } from "@material-tailwind/react";
 import { User, Phone, DollarSign, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import Loading from "../../Other/UI/Loadings/Loading";
 import EmptyData from "../../Other/UI/NoData/EmptyData";
@@ -16,6 +16,8 @@ import Eye from "../../Other/UI/Icons/Eye";
 
 export default function Teacher() {
     const [teachers, setTeachers] = useState([]);
+        const type = Cookies?.get('type')
+    
     const [pagination, setPagination] = useState({
         currentPage: 1,
         total_pages: 1,
@@ -55,7 +57,7 @@ export default function Teacher() {
         <>
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3 sm:gap-0">
-                <h1 className="text-[25px] font-bold">Ustozlar</h1>
+                <h1 className="text-[25px] font-bold">{type === 'PreSchool' ? "Tarbiyachilar" : "Ustozlar"}</h1>
                 <Create refresh={() => getTeacher(pagination.currentPage)} />
             </div>
 
@@ -79,13 +81,15 @@ export default function Teacher() {
 
                                         {/* Actions */}
                                         <div className="flex flex-wrap sm:flex-row items-center gap-2">
-                                            <NavLink to={`/admin/teacher/${t?.id}`}>
-                                                <Button
-                                                    className="bg-blue-500 text-white hover:bg-blue-700 normal-case p-2 rounded-lg shadow-sm"
-                                                >
-                                                    <Eye size={20} />
-                                                </Button>
-                                            </NavLink>
+                                            <Tooltip content="Korish">
+                                                <NavLink to={`/admin/teacher/${t?.id}`}>
+                                                    <Button
+                                                        className="bg-blue-500 text-white hover:bg-blue-700 normal-case p-2 rounded-lg shadow-sm"
+                                                    >
+                                                        <Eye size={20} />
+                                                    </Button>
+                                                </NavLink>
+                                            </Tooltip>
                                             <AddSub employee={t} refresh={getTeacher} />
                                             <Add employee={t} refresh={getTeacher} />
                                             <Put teacher={t} refresh={getTeacher} />
@@ -144,7 +148,7 @@ export default function Teacher() {
                     </div>
                 </>
             ) : (
-                <EmptyData text={'Ustozlar mavjud emas'} />
+                <EmptyData text={type === 'PreSchool' ? "Tarbiyachi mavjud emas" : "Ustoz mavjud emas"} />
             )}
         </>
     );

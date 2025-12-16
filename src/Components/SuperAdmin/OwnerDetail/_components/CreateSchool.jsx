@@ -22,6 +22,7 @@ export default function CreateSchool({ refresh }) {
     const [image, setImage] = useState(null);
     const [type, setType] = useState(""); // School или PreSchool
     const [loading, setLoading] = useState(false);
+    const [Price, setPrice] = useState('');
 
     const handleOpen = () => setOpen(!open);
 
@@ -36,6 +37,7 @@ export default function CreateSchool({ refresh }) {
             formData.append("name", name);
             formData.append("address", address);
             formData.append("owner_id", id);
+            formData.append("price", Price);
             formData.append("type", type); // добавляем тип
             if (image) formData.append("image", image);
 
@@ -48,6 +50,7 @@ export default function CreateSchool({ refresh }) {
             setAddress("");
             setImage(null);
             setType("");
+            setPrice('')
             refresh()
         } catch (error) {
             console.log(error);
@@ -74,6 +77,11 @@ export default function CreateSchool({ refresh }) {
                         label="Manzil"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+                    />
+                    <Input
+                        label="Narxi"
+                        value={Price}
+                        onChange={(e) => setPrice(e.target.value)}
                     />
 
                     {/* Тип Markaz */}

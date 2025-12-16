@@ -52,6 +52,7 @@ const Login = () => {
       Cookies.set("school_id", school_id);
       Cookies.set("role", role);
       Cookies.set("token", access_token);
+      Cookies.set("type", data?.user?.school?.type);
       Cookies.set("refresh_token", refresh_token);
 
       Alert("Muvaffaqiyatli!", "success");

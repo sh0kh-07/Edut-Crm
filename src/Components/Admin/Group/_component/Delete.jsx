@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Tooltip } from "@material-tailwind/react";
 import { Alert } from "../../../../utils/Alert";
 import DeleteIcon from "../../../Other/UI/Icons/DeleteIcon";
 import Cookies from "js-cookie";
@@ -36,12 +36,14 @@ export default function Delete({ id, refresh }) {
     return (
         <>
             {/* Delete Button */}
-            <Button
-                onClick={handleOpen}
-                className="bg-red-600 text-white hover:bg-red-700 active:bg-red-800 normal-case p-[8px] transition-colors duration-200"
-            >
-                <DeleteIcon size={18} />
-            </Button>
+            <Tooltip content="O`chirish">
+                <Button
+                    onClick={handleOpen}
+                    className="bg-red-600 text-white hover:bg-red-700 active:bg-red-800 normal-case p-[8px] transition-colors duration-200"
+                >
+                    <DeleteIcon size={18} />
+                </Button>
+            </Tooltip>
 
             {/* Modal */}
             <Dialog open={open} handler={handleOpen} size="xs">

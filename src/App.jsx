@@ -47,7 +47,7 @@ function App() {
               />
             ))}
           </Route>
-          <Route path="admin" element={
+          <Route  path="admin" element={
             <AdminProtected>
               <AdminLayout />
             </AdminProtected>

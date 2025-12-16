@@ -8,6 +8,7 @@ import {
     Button,
     Select,
     Option,
+    Tooltip,
 } from "@material-tailwind/react";
 
 import { Employee } from "../../../../utils/Controllers/Employee";
@@ -62,12 +63,14 @@ export default function Put({ teacher, refresh }) {
     return (
         <>
             {/* Edit Button */}
-            <Button
-                onClick={handleOpen}
-                className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
-            >
-                <Edit size={18} />
-            </Button>
+            <Tooltip content="Tahrirlash">
+                <Button
+                    onClick={handleOpen}
+                    className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
+                >
+                    <Edit size={18} />
+                </Button>
+            </Tooltip>
 
             {/* Modal */}
             <Dialog open={open} handler={handleOpen} className="p-2" size="">

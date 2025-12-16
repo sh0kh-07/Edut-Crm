@@ -18,10 +18,13 @@ import {
     Home,
     HandCoins
 } from "lucide-react";
+import Cookies from "js-cookie";
+
 
 export default function Sidebar({ open }) {
     const [openMenus, setOpenMenus] = useState({});
     const [isMobile, setIsMobile] = useState(false);
+    const type = Cookies?.get('type')
 
     // Проверяем ширину экрана при монтировании и при изменении размера
     useEffect(() => {
@@ -84,14 +87,14 @@ export default function Sidebar({ open }) {
         },
         {
             id: 2,
-            title: "Ustozlar",
+            title: type === "PreSchool" ? "Tarbiyachi" : "Ustozlar",
             path: "/admin/teacher",
             icon: <Users className="w-6 h-6" />,
             type: "link"
         },
         {
             id: 3,
-            title: "Talabalar",
+            title: type === "PreSchool" ? "Bolalar" : "Talabalar",
             path: "/admin/student",
             icon: <GraduationCap className="w-6 h-6" />,
             type: "link"
@@ -117,7 +120,7 @@ export default function Sidebar({ open }) {
                 },
                 {
                     id: 6,
-                    title: "Fanlar",
+                    title: type === "PreSchool" ? "Tilar" : "Fanlar",
                     path: "/admin/subject",
                     icon: <BookOpen className="w-5 h-5" />
                 },

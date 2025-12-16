@@ -7,6 +7,7 @@ import {
     DialogFooter,
     Input,
     Spinner,
+    Tooltip,
 } from "@material-tailwind/react";
 
 import { StudentApi } from "../../../../utils/Controllers/StudentApi";
@@ -16,6 +17,8 @@ import Edit from "../../../Other/UI/Icons/Edit";
 
 export default function EditStudent({ data: initialData, refresh }) {
     const School_id = Number(Cookies?.get("school_id"));
+    const type = Cookies?.get('type')
+
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -40,16 +43,19 @@ export default function EditStudent({ data: initialData, refresh }) {
     return (
         <>
             {/* Open modal button */}
-            <Button
-                className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
-                onClick={() => setOpen(true)}
-            >
-                <Edit size={18} />
-            </Button>
+            <Tooltip content="Tahrirlash">
+                <Button
+                    className="bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 normal-case p-[8px]"
+                    onClick={() => setOpen(true)}
+                >
+                    <Edit size={18} />
+                </Button>
+            </Tooltip>
+
 
             {/* Modal */}
             <Dialog open={open} handler={() => setOpen(false)} size="sm">
-                <DialogHeader>O‘quvchi tahrirlash</DialogHeader>
+                <DialogHeader>{type === "PreSchool" ? "Bolani tahrirlash" : "Talabani tahrirlash"}</DialogHeader>
 
                 <DialogBody className="flex flex-col gap-4">
                     <Input
@@ -69,20 +75,23 @@ export default function EditStudent({ data: initialData, refresh }) {
                     />
 
                     <Input
-                        label="O‘quvchi ismi"
+                        label={type === "PreSchool" ? "Bola ismi" : "Talaba ismi"}
                         value={data.full_name || ""}
                         onChange={(e) =>
                             setData({ ...data, full_name: e.target.value })
                         }
                     />
 
+                   {type === "School" &&  
+
                     <Input
                         label="O‘quvchi telefon raqami"
-                        value={data.phone_number || ""}
+                        value={data.phone_number}
                         onChange={(e) =>
                             setData({ ...data, phone_number: e.target.value })
                         }
                     />
+                    }
                 </DialogBody>
 
                 <DialogFooter className="flex gap-2">
@@ -94,7 +103,6 @@ export default function EditStudent({ data: initialData, refresh }) {
                     >
                         Bekor qilish
                     </Button>
-
                     <Button
                         className="bg-black flex items-center gap-2"
                         onClick={EditStudentData}

@@ -3,7 +3,7 @@ import { StudentApi } from "../../../utils/Controllers/StudentApi";
 import Create from "./_components/Create";
 import Cookies from "js-cookie";
 
-import { Button } from "@material-tailwind/react";
+import { Button, Tooltip } from "@material-tailwind/react";
 import { Phone, User, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import Delete from "./_components/Delete";
 import Put from "./_components/Put";
@@ -15,6 +15,8 @@ import Add from "./_components/Add";
 
 export default function Student() {
     const [students, setStudents] = useState([]);
+    const type = Cookies?.get('type')
+
     const [pagination, setPagination] = useState({
         currentPage: 1,
         total_pages: 1,
@@ -50,7 +52,7 @@ export default function Student() {
         <>
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3 sm:gap-0">
-                <h1 className="text-[25px] font-bold">Talabalar</h1>
+                <h1 className="text-[25px] font-bold">{type === "PreSchool" ? "Bolalar" : "Talabalar"}</h1>
                 <Create refresh={() => GetStudent(pagination.currentPage)} />
             </div>
 
@@ -62,7 +64,7 @@ export default function Student() {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm">#</th>
-                                    <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm">O‘quvchi</th>
+                                    <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm">{type === "PreSchool" ? "Bola" : "Talaba"}</th>
                                     <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm hidden sm:table-cell">Telefon</th>
                                     <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm hidden md:table-cell">Ota-ona</th>
                                     <th className="px-2 py-2 text-left text-gray-600 font-medium text-sm hidden md:table-cell">Ota-ona tel</th>
@@ -93,11 +95,13 @@ export default function Student() {
                                         </td>
                                         <td className="px-2 py-2 text-sm">
                                             <div className="flex flex-wrap sm:flex-nowrap items-center gap-1 sm:gap-2">
-                                                <NavLink to={`/admin/student/${s?.id}`}>
-                                                    <Button className="bg-blue-600 p-[9px] text-white hover:bg-blue-700 active:bg-blue-800 normal-case  sm:p-2">
-                                                        <Eye size={16} />
-                                                    </Button>
-                                                </NavLink>
+                                                <Tooltip content="Korish">
+                                                    <NavLink to={`/admin/student/${s?.id}`}>
+                                                        <Button className="bg-blue-600 p-[9px] text-white hover:bg-blue-700 active:bg-blue-800 normal-case  sm:p-2">
+                                                            <Eye size={16} />
+                                                        </Button>
+                                                    </NavLink>
+                                                </Tooltip>
                                                 <Add student={s} refresh={() => GetStudent(pagination.currentPage)} />
                                                 <Put data={s} refresh={() => GetStudent(pagination.currentPage)} />
                                                 <Delete id={s?.id} refresh={() => GetStudent(pagination.currentPage)} />
@@ -133,7 +137,7 @@ export default function Student() {
                     )}
                 </>
             ) : (
-                <EmptyData text={'Talaba mavjud emas'} />
+                <EmptyData text={type === "PreSchool" ? "Bolalar mavjud emas" : "Talaba mavjud emas"} />
             )}
         </>
     );

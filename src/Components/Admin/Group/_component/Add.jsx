@@ -4,7 +4,8 @@ import {
     Dialog,
     DialogHeader,
     DialogBody,
-    DialogFooter
+    DialogFooter,
+    Tooltip
 } from "@material-tailwind/react";
 import { Plus } from "lucide-react";
 import { GroupApi } from "../../../../utils/Controllers/GroupApi";
@@ -71,12 +72,14 @@ export default function Add({ group, refresh }) {
 
     return (
         <>
-            <Button
-                onClick={handleOpen}
-                className="bg-gray-200 text-gray-700 hover:bg-gray-300 normal-case p-2 rounded-lg shadow-sm"
-            >
-                <Plus size={18} />
-            </Button>
+            <Tooltip content="Fan qo`shish">
+                <Button
+                    onClick={handleOpen}
+                    className="bg-gray-200 text-gray-700 hover:bg-gray-300 normal-case p-2 rounded-lg shadow-sm"
+                >
+                    <Plus size={18} />
+                </Button>
+            </Tooltip>
 
             <Dialog open={open} handler={handleOpen} size="sm" className="rounded-lg">
 

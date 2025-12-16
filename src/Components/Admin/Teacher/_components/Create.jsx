@@ -17,6 +17,8 @@ import Cookies from "js-cookie";
 export default function Create({ refresh }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
+    const type = Cookies?.get('type')
+
 
     const [loading, setLoading] = useState(false);
 
@@ -63,7 +65,7 @@ export default function Create({ refresh }) {
             </Button>
 
             <Dialog open={open} handler={handleOpen} size="sm">
-                <DialogHeader>Ustoz yaratish</DialogHeader>
+                <DialogHeader> {type === 'PreSchool' ? "Tarbiyachi yaratihs" : "Ustoz yaratish"} </DialogHeader>
 
                 <DialogBody className="flex flex-col gap-4">
 

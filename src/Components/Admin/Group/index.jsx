@@ -7,7 +7,8 @@ import {
     Card,
     CardBody,
     Typography,
-    Button
+    Button,
+    Tooltip
 } from "@material-tailwind/react";
 
 import {
@@ -84,19 +85,23 @@ export default function Group() {
                                         <Typography className="text-[18px] font-bold">{g.name}</Typography>
 
                                         <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
-                                            <NavLink to={`/admin/group/${g?.id}`}>
-                                                <Button className="bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 normal-case p-2">
-                                                    <Eye size={18} />
-                                                </Button>
-                                            </NavLink>
-                                            {g?.subject <= 0 && (<Add group={g} refresh={GetGroup} />)}
-                                            <Put data={g} refresh={GetGroup} />
-                                            <Delete id={g?.id} refresh={GetGroup} />
+                                            <Tooltip content="O`chirish">
+                                                <NavLink to={`/admin/group/${g?.id}`}>
+                                                    <Button className="bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 normal-case p-2">
+                                                        <Eye size={18} />
+                                                    </Button>
+                                                </NavLink>
+                                            </Tooltip>
+                                                {g?.subject <= 0 && (
+                                                        <Add group={g} refresh={GetGroup} />
+                                                )}
+                                                <Put data={g} refresh={GetGroup} />
+                                                <Delete id={g?.id} refresh={GetGroup} />
                                         </div>
                                     </div>
 
                                     {/* Info Grid */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700 ">
                                         <div className="flex gap-2 items-center">
                                             <Calendar size={16} />
                                             <span className="text-sm sm:text-base">Boshlanish: {g.start_date}</span>
@@ -153,4 +158,3 @@ export default function Group() {
         </>
     );
 }
-    

@@ -3,7 +3,8 @@ import {
     Button,
     Dialog,
     DialogBody,
-    DialogFooter
+    DialogFooter,
+    Tooltip
 } from "@material-tailwind/react";
 import { Book, Plus, X } from "lucide-react";
 import { GroupApi } from "../../../../utils/Controllers/GroupApi";
@@ -92,12 +93,15 @@ export default function AddSub({ employee, refresh }) {
 
     return (
         <>
-            <Button
-                onClick={handleOpen}
-                className="bg-green-500 text-white hover:bg-green-700 normal-case p-2 rounded-lg shadow-sm"
-            >
-                <Book size={18} />
-            </Button>
+            <Tooltip content="Fan qo`shish"> 
+                <Button
+                    onClick={handleOpen}
+                    className="bg-green-500 text-white hover:bg-green-700 normal-case p-2 rounded-lg shadow-sm"
+                >
+                    <Book size={18} />
+                </Button>
+            </Tooltip>
+
 
             <Dialog open={open} handler={handleOpen} size="sm" className="rounded-lg">
 
