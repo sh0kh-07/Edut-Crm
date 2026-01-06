@@ -32,7 +32,7 @@ export default function Put({ data, refresh }) {
 
         const init = async () => {
             try {
-                const res = await RoomApi.Get();
+                const res = await RoomApi.Get(Cookies?.get("school_id"));
                 if (!mounted) return;
                 setRooms(res?.data || []);
 

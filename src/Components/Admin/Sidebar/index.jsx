@@ -27,6 +27,7 @@ export default function Sidebar({ open }) {
     const [isMobile, setIsMobile] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const sidebarRef = useRef(null);
+    const [centerData, setCenter]=useState([])
     const type = Cookies?.get('type')
 
     useEffect(() => {
@@ -68,6 +69,7 @@ export default function Sidebar({ open }) {
     const getCenter = async () => {
         try {
             const response = await School?.GetById(Cookies?.get("school_id"))
+            setCenter(response?.data)
         } catch (error) {
             console.log(error)
         }
@@ -359,7 +361,7 @@ export default function Sidebar({ open }) {
             <div className="flex items-center justify-center mb-6">
                 {!actualOpen && (
                     <Typography variant="h5" color="blue-gray" className="font-bold">
-                        Admin Panel
+                        {centerData?.name}
                     </Typography>
                 )}
                 {actualOpen && (

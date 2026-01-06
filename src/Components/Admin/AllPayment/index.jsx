@@ -18,8 +18,11 @@ export default function AllPayment() {
     const [summary, setSummary] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const [year, setYear] = useState("2025");
-    const [month, setMonth] = useState("12");
+    const today = new Date();
+
+    const [year, setYear] = useState(String(today.getFullYear()));
+    const [month, setMonth] = useState(String(today.getMonth() + 1)); // getMonth() возвращает 0-11
+
     const [page, setPage] = useState(1);
 
     const uzMonths = [
@@ -157,7 +160,7 @@ export default function AllPayment() {
                                     </Typography>
 
                                     <Typography>
-                                        Chegirma: {p.discount}%
+                                        Chegirma: {p.discountSum} so`m
                                     </Typography>
 
                                     <Typography>

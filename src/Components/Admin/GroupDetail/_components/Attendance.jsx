@@ -204,7 +204,9 @@ export default function Attendance({ students, group }) {
     <div className="bg-white rounded-lg shadow-md p-6 h-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Davomat</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Davomat: {new Date().toLocaleDateString("ru-RU")}
+        </h2>
         <div className="flex gap-2">
           <button
             onClick={() => setMode("attendance")}

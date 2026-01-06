@@ -22,7 +22,7 @@ import {
 export default function Dashboard() {
     const [card, setCard] = useState(null);
     const [lineData, setLineData] = useState([]);
-    const [year, setYear] = useState(2025);
+    const [year, setYear] = useState(2026);
 
     const getCardAnaliz = async () => {
         try {

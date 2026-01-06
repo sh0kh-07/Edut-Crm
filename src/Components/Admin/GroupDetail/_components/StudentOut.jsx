@@ -5,7 +5,7 @@ import { Alert } from "../../../../utils/Alert";
 import DeleteIcon from "../../../Other/UI/Icons/DeleteIcon";
 import { GroupApi } from "../../../../utils/Controllers/GroupApi";
 
-export default function StudentOut({ id, refresh }) {
+export default function StudentOut({ id, refresh, }) {
 
 
     const [open, setOpen] = useState(false);

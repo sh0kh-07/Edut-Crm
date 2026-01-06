@@ -118,10 +118,10 @@ export default function StudentDetailUz() {
                                                 Boshlanish: {g.group.start_date} ({g.group.start_time} - {g.group.end_time})
                                             </Typography>
                                         </div>
-                                        <Chip
+                                        {/* <Chip
                                             value={g.group.status ? "Faol" : "Nofaol"}
                                             color={g.group.status ? "green" : "red"}
-                                        />
+                                        /> */}
                                     </CardBody>
                                 </Card>
                             ))

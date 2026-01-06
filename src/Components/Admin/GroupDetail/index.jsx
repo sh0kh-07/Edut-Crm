@@ -191,13 +191,10 @@ export default function GroupDetail() {
     const { totalDebtAmount, debtorsCount } = getDebtSummary();
 
     return (
-        <div className="container mx-auto w-full">
+        <div className="mx-auto w-full">
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800">{group.name}</h1>
-                    <div className="text-gray-600 text-sm mt-1">
-                        {currentYear}-yil {currentMonth}-oy qarzdorlar
-                    </div>
                 </div>
                 <div className={`px-3 py-1 rounded-full text-sm ${group.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                     {group.status ? 'Faol' : 'Faol emas'}
@@ -319,9 +316,10 @@ export default function GroupDetail() {
                                                     </div>
                                                     <div className="flex items-center gap-[10px]">
                                                         <Create
+                                                            price={group?.price}
                                                             student_id={student?.student_id}
                                                             group_id={group?.id}
-                                                            refresh={GetGroup}
+                                                            refresh={GetDebtor}
                                                         />
                                                         <StudentOut
                                                             refresh={GetGroup}
@@ -392,14 +390,7 @@ export default function GroupDetail() {
                                     {formatPrice(totalDebtAmount)}
                                 </span>
                             </div>
-                            {debtorsCount > 0 && (
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">O'rtacha qarz:</span>
-                                    <span className="font-medium text-red-600">
-                                        {formatPrice(totalDebtAmount / debtorsCount)}
-                                    </span>
-                                </div>
-                            )}
+                        
                             <div className="text-xs text-gray-500 text-center mt-4 pt-3 border-t">
                                 Ma'lumotlar: {currentYear}-yil {currentMonth}-oy |
                                 Sahifa: {currentPage}/{totalPages}

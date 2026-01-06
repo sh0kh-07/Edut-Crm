@@ -109,7 +109,7 @@ export default function Group() {
 
                                         <div className="flex gap-2 items-center">
                                             <MapPin size={16} />
-                                            <span className="text-sm sm:text-base">Xona: {g.room_id}</span>
+                                            <span className="text-sm sm:text-base">Xona: {g.room?.name}</span>
                                         </div>
 
                                         <div className="flex gap-2 items-center">

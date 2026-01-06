@@ -5,8 +5,6 @@ import {
     DialogBody,
     DialogFooter,
     Input,
-    Select,
-    Option,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { RoomApi } from "../../../../utils/Controllers/RoomApi";
@@ -34,7 +32,7 @@ export default function Create({ refresh }) {
 
     const getRoom = async () => {
         try {
-            const res = await RoomApi.Get();
+            const res = await RoomApi.Get(Cookies?.get("school_id"));
             setRooms(res?.data || []);
         } catch (error) {
             console.log(error);
@@ -42,43 +40,31 @@ export default function Create({ refresh }) {
     };
 
     useEffect(() => {
-        if (open) {
-            getRoom();
-        }
+        if (open) getRoom();
     }, [open]);
 
-    // 🔥 Форматирование цены: 50000 → 50 000
+    // формат цены
     const formatPrice = (value) => {
-        const onlyNums = value.replace(/\D/g, ""); // оставляем только цифры
+        const onlyNums = value.replace(/\D/g, "");
         return onlyNums.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     };
 
     const handlePriceChange = (e) => {
-        const raw = e.target.value.replace(/\s/g, ""); // убираем пробелы
-        const formatted = formatPrice(raw);
-
-        setData({
-            ...data,
-            price: formatted
-        });
+        const raw = e.target.value.replace(/\s/g, "");
+        setData({ ...data, price: formatPrice(raw) });
     };
 
     const CreateGroup = async () => {
         try {
             setLoading(true);
 
-            // перед отправкой убираем пробелы (backend должен получить число)
-            const sendData = {
+            await GroupApi.Create({
                 ...data,
                 price: data.price.replace(/\s/g, "")
-            };
+            });
 
-            await GroupApi.Create(sendData);
-
-            setLoading(false);
             setOpen(false);
-            refresh()
-
+            refresh();
             Alert("Muvaffaqiyatli yaratildi!", "success");
 
             setData({
@@ -91,27 +77,21 @@ export default function Create({ refresh }) {
                 end_time: "",
                 status: true
             });
-
         } catch (error) {
-            console.log(error);
-            setLoading(false);
             Alert("Xato!", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <>
-            <Button
-                className="bg-black text-white"
-                onClick={handleOpen}
-            >
+            <Button className="bg-black text-white" onClick={handleOpen}>
                 + Yaratish
             </Button>
 
             <Dialog open={open} handler={handleOpen} size="sm">
-                <DialogHeader>
-                    Guruh yaratish
-                </DialogHeader>
+                <DialogHeader>Guruh yaratish</DialogHeader>
 
                 <DialogBody divider className="flex flex-col gap-4">
 
@@ -123,7 +103,6 @@ export default function Create({ refresh }) {
                         }
                     />
 
-                    {/* 🔥 formatted price input */}
                     <Input
                         label="Narxi"
                         value={data.price}
@@ -139,19 +118,26 @@ export default function Create({ refresh }) {
                         }
                     />
 
-                    <Select
-                        label="Xona"
-                        value={String(data.room_id)}
-                        onChange={(val) =>
-                            setData({ ...data, room_id: Number(val) })
-                        }
-                    >
-                        {rooms.map((r) => (
-                            <Option key={r.id} value={String(r.id)}>
-                                {r.name}
-                            </Option>
-                        ))}
-                    </Select>
+                    {/* ✅ ПРОСТОЙ SELECT */}
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm text-gray-700">
+                            Xona
+                        </label>
+                        <select
+                            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+                            value={data.room_id}
+                            onChange={(e) =>
+                                setData({ ...data, room_id: Number(e.target.value) })
+                            }
+                        >
+                            <option value="">Xonani tanlang</option>
+                            {rooms.map((r) => (
+                                <option key={r.id} value={r.id}>
+                                    {r.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
                     <Input
                         type="time"
@@ -174,12 +160,7 @@ export default function Create({ refresh }) {
                 </DialogBody>
 
                 <DialogFooter>
-                    <Button
-                        variant="text"
-                        color="gray"
-                        onClick={handleOpen}
-                        className="mr-2"
-                    >
+                    <Button variant="text" onClick={handleOpen}>
                         Bekor qilish
                     </Button>
 

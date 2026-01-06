@@ -12,7 +12,7 @@ import {
     Spinner,
 } from "@material-tailwind/react";
 import { DebtorApi } from "../../../utils/Controllers/DebtorApi";
-import { ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, Wallet, Percent, Calendar } from "lucide-react";
 import EmptyData from "../../Other/UI/NoData/EmptyData";
 import Loading from "../../Other/UI/Loadings/Loading";
 
@@ -36,6 +36,19 @@ const formatPrice = (n) => {
     const s = String(n).replace(/\D/g, "");
     if (s === "") return "0";
     return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
+// Функция для форматирования даты
+const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('uz-UZ', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 };
 
 export default function Debtor() {
@@ -80,6 +93,23 @@ export default function Debtor() {
         getDebtor();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [year, month, page]);
+
+    // Функция для расчета суммарной оплаты
+    const calculateTotalPaid = (payments) => {
+        if (!payments || payments.length === 0) return 0;
+        return payments.reduce((sum, payment) => sum + (payment.paid_amount || 0), 0);
+    };
+
+    // Функция для расчета суммарной скидки
+    const calculateTotalDiscount = (payments) => {
+        if (!payments || payments.length === 0) return 0;
+        return payments.reduce((sum, payment) => sum + (payment.discount_amount || 0), 0);
+    };
+
+    // Функция для расчета чистого дохода (оплата минус скидка)
+    const calculateNetIncome = (payments) => {
+        return calculateTotalPaid(payments) - calculateTotalDiscount(payments);
+    };
 
     return (
         <div className="">
@@ -159,43 +189,136 @@ export default function Debtor() {
                 <EmptyData text={`Malumot yo'q`} />
             ) : (
                 <div className="space-y-4">
-                    {records.map((item) => (
-                        <Card key={item.id} className="w-full shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100">
-                            <div className="p-4">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                    <div className="flex items-center gap-3 flex-1">
-                                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                            <Users className="w-5 h-5 text-blue-600" />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <Typography className="font-semibold text-gray-800 truncate">
-                                                {item.student_name}
-                                            </Typography>
-                                            <Typography variant="small" className="text-gray-600 truncate">
-                                                Guruh nomi: {item.group_name}
-                                            </Typography>
-                                        </div>
-                                    </div>
+                    {records.map((item) => {
+                        const totalPaid = calculateTotalPaid(item.payments);
+                        const totalDiscount = calculateTotalDiscount(item.payments);
+                        const netIncome = calculateNetIncome(item.payments);
+                        const hasPayments = item.payments && item.payments.length > 0;
 
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full sm:w-auto">
-                                        <div className="text-left sm:text-center">
-                                            <div className="text-sm text-gray-500">Guruh narxi</div>
-                                            <div className="font-semibold text-gray-800">
-                                                {formatPrice(item.group_price)} so'm
+                        return (
+                            <Card key={item.id} className="w-full shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100">
+                                <div className="p-4">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                                <Users className="w-5 h-5 text-blue-600" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <Typography className="font-semibold text-gray-800 truncate">
+                                                    {item.student_name}
+                                                </Typography>
+                                                <Typography variant="small" className="text-gray-600 truncate">
+                                                    Guruh nomi: {item.group_name}
+                                                </Typography>
+                                                {item.teacher_name && (
+                                                    <Typography variant="small" className="text-gray-500 truncate">
+                                                        O'qituvchi: {item.teacher_name}
+                                                    </Typography>
+                                                )}
                                             </div>
                                         </div>
 
-                                        <div className="text-left sm:text-center">
-                                            <div className="text-sm text-gray-500">Qarzi</div>
-                                            <div className="font-bold text-red-600">
-                                                {formatPrice(item.debt)} so'm
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full sm:w-auto">
+                                            <div className="text-left sm:text-center">
+                                                <div className="text-sm text-gray-500">Guruh narxi</div>
+                                                <div className="font-semibold text-gray-800">
+                                                    {formatPrice(item.group_price)} so'm
+                                                </div>
+                                            </div>
+
+                                            <div className="text-left sm:text-center">
+                                                <div className="text-sm text-gray-500">To'langan</div>
+                                                <div className="font-bold text-green-600 flex items-center gap-1">
+                                                    <Wallet className="w-4 h-4" />
+                                                    {formatPrice(totalPaid)} so'm
+                                                </div>
+                                            </div>
+
+                                            <div className="text-left sm:text-center">
+                                                <div className="text-sm text-gray-500">Chegirma</div>
+                                                <div className="font-bold text-orange-600 flex items-center gap-1">
+                                                    {formatPrice(totalDiscount)} so'm
+                                                </div>
+                                            </div>
+
+                                            <div className="text-left sm:text-center">
+                                                <div className="text-sm text-gray-500">Qarzi</div>
+                                                <div className="font-bold text-red-600">
+                                                    {formatPrice(item.debt)} so'm
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* Детали платежей */}
+                                    {hasPayments && (
+                                        <div className="mt-4 pt-4 border-t border-gray-100">
+                                            <Typography variant="small" className="text-gray-600 font-medium mb-2 flex items-center gap-2">
+                                                <Calendar className="w-4 h-4" />
+                                                To'lovlar tarixi:
+                                            </Typography>
+                                            <div className="space-y-2">
+                                                {item.payments.map((payment, index) => (
+                                                    <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-gray-50 rounded-lg">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="text-sm text-gray-600">
+                                                                {formatDate(payment.payment_date)}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="text-sm">
+                                                                <span className="text-gray-600">To'landi: </span>
+                                                                <span className="font-semibold text-green-600">
+                                                                    {formatPrice(payment.paid_amount)} so'm
+                                                                </span>
+                                                            </div>
+                                                            {payment.discount_amount > 0 && (
+                                                                <div className="text-sm">
+                                                                    <span className="text-gray-600">Chegirma: </span>
+                                                                    <span className="font-semibold text-orange-600">
+                                                                        {formatPrice(payment.discount_amount)} so'm
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Сводка */}
+                                            <div className="mt-3 pt-3 border-t border-gray-200">
+                                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                                    <div className="text-sm">
+                                                        <span className="text-gray-600">Jami to'langan: </span>
+                                                        <span className="font-bold text-green-600">
+                                                            {formatPrice(totalPaid)} so'm
+                                                        </span>
+                                                    </div>
+                                                    {totalDiscount > 0 && (
+                                                        <div className="text-sm">
+                                                            <span className="text-gray-600">Jami chegirma: </span>
+                                                            <span className="font-bold text-orange-600">
+                                                                {formatPrice(totalDiscount)} so'm
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {!hasPayments && (
+                                        <div className="mt-4 pt-4 border-t border-gray-100 text-center">
+                                            <Typography variant="small" className="text-gray-500 italic">
+                                                Hozircha to'lov qilinmagan
+                                            </Typography>
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-                        </Card>
-                    ))}
+                            </Card>
+                        );
+                    })}
                 </div>
             )}
 
@@ -251,6 +374,45 @@ export default function Debtor() {
                     >
                         <ChevronRight className="w-4 h-4" />
                     </Button>
+                </div>
+            )}
+
+            {/* Общая статистика */}
+            {records.length > 0 && !loading && (
+                <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+                    <Typography variant="h6" className="text-gray-800 mb-3">
+                        Umumiy statistika
+                    </Typography>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="p-3 bg-white rounded-lg shadow-sm">
+                            <div className="text-sm text-gray-500">Jami qarzdorlar</div>
+                            <div className="text-xl font-bold text-gray-800">{records.length} ta</div>
+                        </div>
+                        <div className="p-3 bg-white rounded-lg shadow-sm">
+                            <div className="text-sm text-gray-500">Jami to'langan</div>
+                            <div className="text-xl font-bold text-green-600">
+                                {formatPrice(
+                                    records.reduce((sum, item) => sum + calculateTotalPaid(item.payments), 0)
+                                )} so'm
+                            </div>
+                        </div>
+                        <div className="p-3 bg-white rounded-lg shadow-sm">
+                            <div className="text-sm text-gray-500">Jami chegirma</div>
+                            <div className="text-xl font-bold text-orange-600">
+                                {formatPrice(
+                                    records.reduce((sum, item) => sum + calculateTotalDiscount(item.payments), 0)
+                                )} so'm
+                            </div>
+                        </div>
+                        <div className="p-3 bg-white rounded-lg shadow-sm">
+                            <div className="text-sm text-gray-500">Jami qarz</div>
+                            <div className="text-xl font-bold text-red-600">
+                                {formatPrice(
+                                    records.reduce((sum, item) => sum + (item.debt || 0), 0)
+                                )} so'm
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
