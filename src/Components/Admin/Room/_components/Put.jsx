@@ -22,6 +22,8 @@ export default function Put({ data, refresh }) {
     const [EditData, setEditData] = useState({
         name: data?.name || "",
         status: data?.status || "",
+        school_id: Number(data?.school_id)
+
     });
 
     const EditRoom = async () => {

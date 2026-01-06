@@ -11,6 +11,8 @@ import {
 
 import { Alert } from "../../../../utils/Alert";
 import { RoomApi } from "../../../../utils/Controllers/RoomApi";
+import Cookies from "js-cookie";
+
 
 export default function Create({ refresh }) {
     const [open, setOpen] = useState(false);
@@ -21,6 +23,7 @@ export default function Create({ refresh }) {
     const [data, setData] = useState({
         name: "",
         status: "", // вместимость
+        school_id:Number(Cookies.get("school_id"))
     });
 
     const CreateRoom = async () => {

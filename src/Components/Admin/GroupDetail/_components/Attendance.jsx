@@ -282,7 +282,7 @@ export default function Attendance({ students, group }) {
               attendance.map((item, index) => (
                 <tr key={item.student_id} className="border-b hover:bg-gray-50">
                   <td className="py-3 px-4">{index + 1}</td>
-                  <td className="py-3 px-4">{item.student_name}</td>
+                  <td className="py-3 px-4">{item?.student_name}</td>
 
                   {mode === "attendance" ? (
                     <td className="py-3 px-4">

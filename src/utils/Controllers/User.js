@@ -14,4 +14,8 @@ class User {
         const response = await $api.get(`/user/${id}`)
         return response;
     }
+    static DeleteUser = async (id) => {
+        const response = await $api.delete(`/user/${id}`)
+        return response;
+    }
 } export { User }

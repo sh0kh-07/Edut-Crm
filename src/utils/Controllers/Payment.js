@@ -26,7 +26,7 @@ class Payment {
         return response
     }
     static GetDebtorInMonth = async (data) => {
-        const response = await $api.get(`/payment/debtor-group/${data?.school_id}/${data?.group_id}/${data?.yaers}/${data?.month}/page?page=${data?.page}`)
+        const response = await $api.get(`/payment/debtor-group/${data?.school_id}/${data?.group_id}/${data?.years}/${data?.month}/page?page=${data?.page}`)
         return response
     }
 

@@ -7,8 +7,8 @@ class RoomApi {
         return response;
     }
 
-    static Get = async () => {
-        const response = await $api.get(`/room`)
+    static Get = async (id) => {
+        const response = await $api.get(`/room/all/${id}`)
         return response;
     }
 

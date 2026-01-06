@@ -8,6 +8,8 @@ import Loading from "../../Other/UI/Loadings/Loading";
 import EmptyData from "../../Other/UI/NoData/EmptyData";
 import Delete from "./_components/Delete";
 import Put from "./_components/Put";
+import Cookies from "js-cookie";
+
 
 export default function Room() {
     const [rooms, setRooms] = useState([]);
@@ -16,7 +18,7 @@ export default function Room() {
     const getRooms = async () => {
         try {
             setLoading(true);
-            const response = await RoomApi.Get();
+            const response = await RoomApi.Get(Cookies.get("school_id"));
             setRooms(response?.data || []);
         } catch (error) {
             console.log(error);
